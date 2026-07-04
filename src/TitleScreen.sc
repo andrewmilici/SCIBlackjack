@@ -26,7 +26,7 @@
 
 (instance TitleScreen of Rm
 	(properties
-		picture scriptNumber
+		picture 1
 	)
 	
 	(method (init)
@@ -52,7 +52,7 @@
 ;
 ;         * Add the rest of your initialization stuff here *
 		(Display
-			{Intro/Opening Screen}
+			{Deal}
 			dsCOORD
 			90
 			80

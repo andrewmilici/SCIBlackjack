@@ -233,6 +233,12 @@
 	)
 )
 
+(class CView of View
+	(properties
+		cursorX 232
+		cursorY 0
+	)
+)
 
 (class Prop of View
 	(properties

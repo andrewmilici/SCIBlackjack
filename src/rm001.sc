@@ -328,7 +328,7 @@
 		view 5
 		loop 0
 		x 150
-		y 105
+		y 205
 	)
 )
 
@@ -498,6 +498,107 @@
 		)
 	)
 )	
+
+
+(instance dealButton of CView
+	(properties
+		y 20
+		x 35
+		view 6
+		;loop 6
+	)
+
+	(method (handleEvent event)
+		(if
+			(and
+				(not (event claimed:))
+				(or
+					(and (== (event type:) evKEYBOARD) (== (event message:) KEY_RETURN))
+					(== (event type:) evMOUSEBUTTON)
+				)
+				(<= nsLeft (event x:) nsRight)
+				(<= nsTop (event y:) nsBottom)
+				;(<= nsTop (- (event y:) 10) nsBottom)
+			)
+			(event claimed: 1)
+			(if (!= gameState gStateNotStarted)
+				(Print 11 0)
+			else
+				(NewGame)
+			)
+
+		)
+		(event claimed:)
+	)
+)
+
+(instance hitButton of CView
+	(properties
+		y 20
+		x 72
+		view 6
+		loop 0
+		cel 1
+	)
+
+	(method (handleEvent event)
+		(if
+			(and
+				(not (event claimed:))
+				(or
+					(and (== (event type:) evKEYBOARD) (== (event message:) KEY_RETURN))
+					(== (event type:) evMOUSEBUTTON)
+				)
+				(<= nsLeft (event x:) nsRight)
+				(<= nsTop (event y:) nsBottom)
+				;(<= nsTop (- (event y:) 10) nsBottom)
+			)
+			(event claimed: 1)
+				(if (!= gameState gStatePlayerTurn)
+							(Print 11 12)
+						else
+							(rm001 setScript: addCardScript)
+	  					)
+		)
+		(event claimed:)
+	)
+)
+
+(instance standButton of CView
+	(properties
+		y 20
+		x 109
+		
+		view 6
+		loop 0
+		cel 2
+	)
+
+	(method (handleEvent event)
+		(if
+			(and
+				(not (event claimed:))
+				(or
+					(and (== (event type:) evKEYBOARD) (== (event message:) KEY_RETURN))
+					(== (event type:) evMOUSEBUTTON)
+				)
+				(<= nsLeft (event x:) nsRight)
+				(<= nsTop (event y:) nsBottom)
+				;(<= nsTop (- (event y:) 10) nsBottom)
+			)
+			(event claimed: 1)
+
+			(if (!= gameState gStatePlayerTurn)
+				(Print 11 12)
+			else
+				(rm001 setScript: standScript)
+			)
+
+		)
+		(event claimed:)
+	)
+)
+
 (instance rm001 of Rm
 	(properties
 		picture scriptNumber
@@ -505,6 +606,9 @@
 	
 	(method (init)
 		(super init:)
+		(dealButton init:)
+		(hitButton init:)
+		(standButton init:)
 		(self setScript: RoomScript)
 		(= gameState gStateNotStarted)
 		(HandsOn)
@@ -515,13 +619,18 @@
 (instance RoomScript of Script
 	(properties)
 	(method (handleEvent pEvent &tmp mods)
+		;(super handleEvent: event)
+	
+		(dealButton handleEvent: pEvent)
+		(hitButton handleEvent: pEvent)
+		(standButton handleEvent: pEvent)
 		(switch (pEvent type:)
-			(evMOUSEBUTTON
-				(= mods (pEvent modifiers:)) ; its the only way i could get it to work - i hate this
-				(if (== mods 544)
-					(Print {left click})
-				)
-			)
+			;(evMOUSEBUTTON
+			;	(= mods (pEvent modifiers:)) ; its the only way i could get it to work - i hate this
+			;	(if (== mods 544)
+			;		(Print {left click})
+			;	)
+			;)
 			(evKEYBOARD
 				(switch (pEvent message?)
 	            	($3E00     ; F4 - start game
@@ -553,8 +662,8 @@
 				)
 			)
 		)
-		(if (not (pEvent claimed:))
-			(super handleEvent: pEvent)
-		)
+		;(if (not (pEvent claimed:))
+		;	(super handleEvent: pEvent)
+		;)
 	)
 )
